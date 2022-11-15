@@ -1,21 +1,36 @@
-#ifndef ocs_includes_h
-#define ocs_includes_h
+#pragma once
 
 // versioning
-#define OCS_PANEL_VERSION "0.1"
+#define OCS_PANEL_SOFTWARE_VERSION 1
+
+#include <U8g2lib.h>
+#include <Wire.h>
+
+#include <LEDController.h>
 
 #include <configuration.h>
 #include <protocol.h>
 #include <pinmap.h>
 #include <iocontrol.h>
+#include <display.h>
+#include <display_logos.h>
 
 #include <Arduino.h>
 
 #include <WiFi.h>
 #include <esp_wifi.h>
 #include <esp_now.h>
+// Debouncing library
+#include <Bounce2.h>
+// For saving things in the flash memory
+#include <Preferences.h>
 
+// This makes it usable in all files
+extern IOCONTROL ioControl;
 extern DATA_TO_CONTROL dataToControl;
+extern DATA_TO_CLIENT dataToClient;
+extern PROTOCOL protocol;
+extern DISPLAYMANAGER display;
 
 // DEBUG MACRO
 #ifdef OCS_DEBUG    //Macros are usually in all capital letters.
@@ -24,6 +39,4 @@ extern DATA_TO_CONTROL dataToControl;
 #else
 #define DPRINT(...)     //now defines a blank line
 #define DPRINTLN(...)   //now defines a blank line
-#endif
-
 #endif

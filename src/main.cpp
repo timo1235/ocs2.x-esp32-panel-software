@@ -3,12 +3,12 @@
 void setup() {
   Serial.begin(115200);
 
-  protocol_setup();
-  iocontrol_setup();
+  protocol.setup();
+  ioControl.setup();
+  display.setup();
 }
 
 void loop() {
-  iocontrol_readAll();
-  protocol_sendMessageToController();
-  delay(WIFI_DELAY);
+  ioControl.loop();
+  protocol.loop();
 }

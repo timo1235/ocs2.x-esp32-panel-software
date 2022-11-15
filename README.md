@@ -16,3 +16,4 @@ Take a look at the `src/pinmap.h` for the pin mapping of functions and at `src/c
 ## To be done
 - fine tuning
 - more configuration
+- bounce of inputs
