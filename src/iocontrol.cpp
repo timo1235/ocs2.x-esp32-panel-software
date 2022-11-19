@@ -416,6 +416,8 @@ void IOCONTROL::readDynamicButtons(const char *functionName, Bounce *button) {
 
 void IOCONTROL::readAll()
 {
+    byte sampleCount = 10;
+    uint16_t sampleDelay_Micros = 10;
     dataToControl.selectAxisX = !buttonSelectAxisX.read();
     dataToControl.selectAxisY = !buttonSelectAxisY.read();
     dataToControl.selectAxisZ = !buttonSelectAxisZ.read();
@@ -428,8 +430,19 @@ void IOCONTROL::readAll()
     this->readDynamicButtons(BUTTON_3, &this->button3);
     this->readDynamicButtons(BUTTON_4, &this->button4);
 
-    int16_t measurement[3] = {(int16_t)analogRead(JOYSTICK_X_PIN), (int16_t)analogRead(JOYSTICK_Y_PIN), (int16_t)analogRead(JOYSTICK_Z_PIN)};
-    uint16_t testZ = measurement[this->calibrationConfig.joystickAxes[2]];
+    int32_t measurement[3] = {0, 0, 0};
+    // Read joystick with some samples to get a better value
+    for (uint8_t i = 0; i < sampleCount; i++)
+    {
+        measurement[0] += analogRead(JOYSTICK_X_PIN);
+        measurement[1] += analogRead(JOYSTICK_Y_PIN);
+        measurement[2] += analogRead(JOYSTICK_Z_PIN);
+        delayMicroseconds(sampleDelay_Micros);
+    }
+    measurement[0] /= sampleCount;
+    measurement[1] /= sampleCount;
+    measurement[2] /= sampleCount;
+    
     for (uint8_t i = 0; i < 3; i++)
     {
         // Add offset
@@ -459,12 +472,26 @@ void IOCONTROL::readAll()
     // DPRINT("\tJoystick Y(" + String(this->calibrationConfig.joystickAxes[1]) + "): \t" + String(dataToControl.joystickY));
     // DPRINTLN("\tJoystick Z(" + String(this->calibrationConfig.joystickAxes[2]) + "): \t" + String(dataToControl.joystickZ));
 
-    uint16_t feedrate = analogRead(FEEDRATE_PIN);
+    uint32_t feedrate = 0;
+    for (uint8_t i = 0; i < sampleCount; i++)
+    {
+        feedrate += analogRead(FEEDRATE_PIN);
+        delayMicroseconds(sampleDelay_Micros);
+    }
+    feedrate /= sampleCount;
+    
     if (this->calibrationConfig.invertFeedrate)
     {
         feedrate = 4095 - feedrate;
     }
-    uint16_t rotationSpeed = analogRead(ROTATION_SPEED_PIN);
+    uint32_t rotationSpeed = 0;
+    for (uint8_t i = 0; i < sampleCount; i++)
+    {
+        rotationSpeed += analogRead(ROTATION_SPEED_PIN);
+        delayMicroseconds(sampleDelay_Micros);
+    }
+    rotationSpeed /= sampleCount;
+    
     if (this->calibrationConfig.invertFeedrate)
     {
         rotationSpeed = 4095 - rotationSpeed;
