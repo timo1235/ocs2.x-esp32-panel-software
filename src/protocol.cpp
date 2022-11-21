@@ -1,7 +1,7 @@
 #include <includes.h>
 
 uint8_t controllerMacAddress[] = CONTROLLER_MAC_ADDRESS;
-DATA_TO_CONTROL dataToControl = {OCS_PANEL_SOFTWARE_VERSION, 512, 512, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+DATA_TO_CONTROL dataToControl = {OCS_PANEL_SOFTWARE_VERSION, 512, 512, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 DATA_TO_CLIENT dataToClient = {};
 
 esp_now_peer_info_t peerInfo;
@@ -98,6 +98,10 @@ void PROTOCOL::initializeCommand()
     dataToControl.command.setEna = HAS_ENA_BUTTON;
     dataToControl.command.setSpeed1 = HAS_SPEED1_BUTTON;
     dataToControl.command.setSpeed2 = HAS_SPEED2_BUTTON;
+    dataToControl.command.setOutput1 = HAS_OUTPUT1_BUTTON;
+    dataToControl.command.setOutput2 = HAS_OUTPUT2_BUTTON;
+    dataToControl.command.setOutput3 = HAS_OUTPUT3_BUTTON;
+    dataToControl.command.setOutput4 = HAS_OUTPUT4_BUTTON;
     dataToControl.command.returnACK = 1;
     dataToControl.command.returnData = 1;
     dataToControl.command.updateInterval_MS = WIFI_DELAY;

@@ -411,6 +411,14 @@ void IOCONTROL::readDynamicButtons(const char *functionName, Bounce *button) {
         dataToControl.speed1 = !button->read();
     } else if(functionName == "speed2") {
         dataToControl.speed2 = !button->read();
+    } else if(functionName == "output1") {
+        dataToControl.output1 = !button->read();
+    } else if(functionName == "output2") {
+        dataToControl.output2 = !button->read();
+    } else if(functionName == "output3") {
+        dataToControl.output3 = !button->read();
+    } else if(functionName == "output4") {
+        dataToControl.output4 = !button->read();
     }
 }
 

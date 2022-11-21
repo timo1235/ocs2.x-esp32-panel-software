@@ -20,6 +20,10 @@ typedef struct
     unsigned setMotorStart : 1;
     unsigned setSpeed1 : 1;
     unsigned setSpeed2 : 1;
+    unsigned setOutput1 : 1;
+    unsigned setOutput2 : 1;
+    unsigned setOutput3 : 1;
+    unsigned setOutput4 : 1;
     unsigned returnACK : 1;  // Return ACK to client
     unsigned returnData : 1; // Return mainboard data to client, this can be the temperature, autosquaring state and so son and replaces ACK
     uint16_t updateInterval_MS; // Interval in ms the client sends data to the mainboard
@@ -56,6 +60,10 @@ typedef struct
     unsigned motorStart : 1;
     unsigned speed1 : 1;
     unsigned speed2 : 1;
+    unsigned output1 : 1;
+    unsigned output2 : 1;
+    unsigned output3 : 1;
+    unsigned output4 : 1;
     DATA_COMMAND command;
 } DATA_TO_CONTROL;
 

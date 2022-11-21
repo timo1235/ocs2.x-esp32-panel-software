@@ -1,7 +1,7 @@
 #pragma once
 
 // versioning
-#define OCS_PANEL_SOFTWARE_VERSION 1
+#define OCS_PANEL_SOFTWARE_VERSION 2
 
 #include <U8g2lib.h>
 #include <Wire.h>

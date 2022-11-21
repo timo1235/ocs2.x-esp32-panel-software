@@ -18,3 +18,10 @@ Take a look at the `src/pinmap.h` for the pin mapping of functions and at `src/c
 
 ## To be done
 - implement connection over RJ45 - Serial communication
+
+# Changelog
+## version 2
+- Added possibility to control also output 1-4 of the open cnc shield with the buttons 1-4
+
+## version 1
+- initial version
