@@ -19,9 +19,17 @@ Take a look at the `src/pinmap.h` for the pin mapping of functions and at `src/c
 ## To be done
 - implement connection over RJ45 - Serial communication
 
+## Hint for PCB version 1.4
+The menu button on the pcb is not working due to the onboard led. So button4 as used as menu button by default. Just use some push button between button4 and GND for 3 seconds to start the calibration process. This will be fixed with the next pcb version.
+
+## Menu button
+- Short press: Go through the different settings - changes can not be made here. Only when uploading the firmware.
+- long press > 3 seconds: Start the calibration process
+- long press > 6 seconds: Reset the calibration config - like resetting to factory defaults
+
 # Changelog
 ## version 2
-- Added possibility to control also output 1-4 of the open cnc shield with the buttons 1-4
+- Added possibility to control also output 1-4 of the open cnc shield with the buttons 1-3
 
 ## version 1
 - initial version

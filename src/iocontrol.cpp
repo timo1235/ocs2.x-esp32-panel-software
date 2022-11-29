@@ -28,8 +28,7 @@ void IOCONTROL::setup()
     button4.interval(5);
     button4.attach(BUTTON_4_PIN, INPUT_PULLUP);
     button4.interval(5);
-    buttonMenu.attach(MENU_BUTTON_PIN, INPUT_PULLUP);
-    // buttonMenu.attach(MENU_BUTTON_PIN, INPUT_PULLDOWN);
+    buttonMenu.attach(MENU_BUTTON_PIN, INPUT_PULLDOWN);
     buttonMenu.interval(5);
 
     // pinMode(RJ45_LED_L_PIN, OUTPUT);
@@ -69,15 +68,25 @@ void IOCONTROL::loop()
 
 void IOCONTROL::handleMenuButton()
 {
+    Bounce *button;
+    bool pressedState = HIGH;
+    // Use button4 as menu button if configured
+    if(BUTTON_4 == "menu") {
+        button = &button4;
+        pressedState = LOW;
+    } else {
+        button = &buttonMenu;
+    }
+
     // Button is released and was pressed for some time
-    if (buttonMenu.read() == LOW && buttonMenuWasPressed)
+    if (button->read() == !pressedState && buttonMenuWasPressed)
     {
         this->buttonMenuWasPressed = false;
         // Handle longest press first
         // Reset calibration
-        if (buttonMenu.previousDuration() > TIME_TO_PRESS_BUTTON_BEFORE_RESET_CALIBRATION_MS)
+        if (button->previousDuration() > TIME_TO_PRESS_BUTTON_BEFORE_RESET_CALIBRATION_MS)
         {
-            DPRINTLN("Previous duration: " + String(buttonMenu.previousDuration()) + " -- Resetting calibration");
+            DPRINTLN("Previous duration: " + String(button->previousDuration()) + " -- Resetting calibration");
             display.setScreen(WAIT_SCREEN);
             this->resetCalibrationConfig();
             delay(2000);
@@ -85,9 +94,9 @@ void IOCONTROL::handleMenuButton()
             return;
         }
         // Start Calibration
-        if (buttonMenu.previousDuration() > TIME_TO_PRESS_BUTTON_BEFORE_CALIBRATION_MS)
+        if (button->previousDuration() > TIME_TO_PRESS_BUTTON_BEFORE_CALIBRATION_MS)
         {
-            DPRINTLN("Previous duration: " + String(buttonMenu.previousDuration()) + " -- Starting calibration");
+            DPRINTLN("Previous duration: " + String(button->previousDuration()) + " -- Starting calibration");
             this->startCalibration();
             return;
         }
@@ -96,12 +105,12 @@ void IOCONTROL::handleMenuButton()
         return;
     }
     // Button is pressed
-    if (buttonMenu.read() == HIGH)
+    if (button->read() == pressedState)
     {
         this->stopBlinkRJ45LED();
         this->buttonMenuWasPressed = true;
         // Show reset screen
-        if (buttonMenu.currentDuration() > TIME_TO_PRESS_BUTTON_BEFORE_RESET_CALIBRATION_MS)
+        if (button->currentDuration() > TIME_TO_PRESS_BUTTON_BEFORE_RESET_CALIBRATION_MS)
         {
             DPRINTLN("Longer pressed button 4");
             display.setScreen(RESET_SCREEN);
@@ -109,7 +118,7 @@ void IOCONTROL::handleMenuButton()
             return;
         }
         // Show calibration screen
-        if (buttonMenu.currentDuration() > TIME_TO_PRESS_BUTTON_BEFORE_CALIBRATION_MS)
+        if (button->currentDuration() > TIME_TO_PRESS_BUTTON_BEFORE_CALIBRATION_MS)
         {
             DPRINTLN("Long pressed button 4");
             display.setScreen(CALIBRATION_SCREEN);
@@ -122,37 +131,46 @@ void IOCONTROL::handleMenuButton()
 
 void IOCONTROL::showSettings()
 {
-    buttonMenu.update();
+    Bounce *button = &buttonMenu;
+    bool useButton4 = false;
+
+    // Use button4 as menu button if configured
+    if(BUTTON_4 == "menu") {
+        button = &button4;
+        useButton4 = true;
+    }
+
+    button->update();
     display.setScreen(SETTINGS1_SCREEN);
-    while (!buttonMenu.fell())
+    while ((useButton4) ? !button->rose() : !button->fell())
     {
-        buttonMenu.update();
+        button->update();
     }
-    buttonMenu.update();
+    button->update();
     display.setScreen(SETTINGS2_SCREEN);
-    while (!buttonMenu.fell())
+    while ((useButton4) ? !button->rose() : !button->fell())
     {
-        buttonMenu.update();
+        button->update();
     }
-    buttonMenu.update();
+    button->update();
     display.setScreen(SETTINGS3_SCREEN);
-    while (!buttonMenu.fell())
+    while ((useButton4) ? !button->rose() : !button->fell())
     {
-        buttonMenu.update();
+        button->update();
     }
-    buttonMenu.update();
+    button->update();
     display.setScreen(SETTINGS4_SCREEN);
-    while (!buttonMenu.fell())
+    while ((useButton4) ? !button->rose() : !button->fell())
     {
-        buttonMenu.update();
+        button->update();
     }
-    buttonMenu.update();
+    button->update();
     display.setScreen(SETTINGS5_SCREEN);
-    while (!buttonMenu.fell())
+    while ((useButton4) ? !button->rose() : !button->fell())
     {
-        buttonMenu.update();
+        button->update();
     }
-    buttonMenu.update();
+    button->update();
     display.setScreen(DEFAULT_SCREEN);
 }
 
@@ -402,6 +420,7 @@ void IOCONTROL::startCalibration()
 
     // Needed so that calibration wont start directly again
     buttonMenu.update();
+    button4.update();
 }
 
 void IOCONTROL::readDynamicButtons(const char *functionName, Bounce *button) {

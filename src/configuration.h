@@ -23,7 +23,7 @@
 #define HAS_ENA_BUTTON              true // If true it needs to be mapped to a free button, see buttons 1-4 below
 #define HAS_SPEED1_BUTTON           false // If true it needs to be mapped to a free button, see buttons 1-4 below
 #define HAS_SPEED2_BUTTON           false // If true it needs to be mapped to a free button, see buttons 1-4 below
-#define HAS_OUTPUT1_BUTTON          true // If true it needs to be mapped to a free button, see buttons 1-4 below
+#define HAS_OUTPUT1_BUTTON          false // If true it needs to be mapped to a free button, see buttons 1-4 below
 #define HAS_OUTPUT2_BUTTON          false // If true it needs to be mapped to a free button, see buttons 1-4 below
 #define HAS_OUTPUT3_BUTTON          false // If true it needs to be mapped to a free button, see buttons 1-4 below
 #define HAS_OUTPUT4_BUTTON          false // If true it needs to be mapped to a free button, see buttons 1-4 below
@@ -32,8 +32,8 @@
 #define OCS_DEBUG
 
 // Button configuration - what is the button used for?
-// Possible values: "ena", "speed1", "speed2", "output1", "output2", "output3", "output4"
-#define BUTTON_1 "output1"
+// Possible values: "ena", "speed1", "speed2", "output1", "output2", "output3", "output4", "menu", "none"
+#define BUTTON_1 "ena"
 #define BUTTON_2 "speed1"
 #define BUTTON_3 "speed2"
-#define BUTTON_4 "free"
+#define BUTTON_4 "menu" // Typically used for menu since the onboard button does not work on pcb version 1.04

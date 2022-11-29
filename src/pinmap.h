@@ -1,20 +1,20 @@
 #ifndef ocs_pinmap_h
 #define ocs_pinmap_h
 
-#define JOYSTICK_X_PIN 32
-#define JOYSTICK_Y_PIN 33
-#define JOYSTICK_Z_PIN 36
+#define JOYSTICK_X_PIN 36
+#define JOYSTICK_Y_PIN 39
+#define JOYSTICK_Z_PIN 34
 
 #define RJ45_LED_L_PIN 12
 #define RJ45_LED_R_PIN 13
 
-#define AUTOSQUARE_PIN 35
-#define MOTOR_START_PIN 25 // joystick z
-#define PROGRAMM_START_PIN 27 // rotation speed
-#define OK_PIN 26 // Feedrate
+#define AUTOSQUARE_PIN 27
+#define MOTOR_START_PIN 25 
+#define PROGRAMM_START_PIN 33
+#define OK_PIN 26
 
-#define FEEDRATE_PIN 39 // Motor start
-#define ROTATION_SPEED_PIN 34 // ok button
+#define FEEDRATE_PIN 35
+#define ROTATION_SPEED_PIN 32
 
 #define BUTTON_1_PIN 23
 #define BUTTON_2_PIN 19
