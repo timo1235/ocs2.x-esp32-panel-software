@@ -19,7 +19,7 @@ Take a look at the `src/pinmap.h` for the pin mapping of functions and at `src/c
 ## To be done
 - implement connection over RJ45 - Serial communication
 
-## Hint for PCB version 1.4
+## Hint for PCB version 1.04
 The menu button on the pcb is not working due to the onboard led. So button4 as used as menu button by default. Just use some push button between button4 and GND for 3 seconds to start the calibration process. This will be fixed with the next pcb version.
 
 ## Menu button
