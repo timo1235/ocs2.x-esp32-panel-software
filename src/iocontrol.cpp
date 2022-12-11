@@ -519,7 +519,7 @@ void IOCONTROL::readAll()
     }
     rotationSpeed /= sampleCount;
     
-    if (this->calibrationConfig.invertFeedrate)
+    if (this->calibrationConfig.invertRotationSpeed)
     {
         rotationSpeed = 4095 - rotationSpeed;
     }
