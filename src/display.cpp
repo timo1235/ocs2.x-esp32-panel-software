@@ -108,8 +108,14 @@ void DISPLAYMANAGER::showDefaultScreen()
 {
     u8g2.clearBuffer();
     bool connected = PROTOCOL::isConnected();
+    // Show banned status
+    if (dataToClient.peerIgnored) {
+        u8g2.setFont(FONT_10PX);
+        u8g2.drawStr(0, 48, "Fehler: Peer ");
+        u8g2.drawStr(0, 60, "gebannt - restart");
+    }
     // Connection status
-    if (!connected)
+    else if (!connected)
     {
         u8g2.setFont(FONT_12PX);
         u8g2.drawStr(0, 60, "No Connection");
