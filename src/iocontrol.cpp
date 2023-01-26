@@ -526,9 +526,6 @@ void IOCONTROL::readAll()
 
     dataToControl.feedrate = map(feedrate, 0, 4095, 0, 1023);
     dataToControl.rotationSpeed = map(rotationSpeed, 0, 4095, 0, 1023);
-
-    // DPRINT("Feedrate: \t" + String(dataToControl.feedrate));
-    // DPRINTLN("\tRotation Speed: \t" + String(dataToControl.rotationSpeed));
 }
 
 void IOCONTROL::startBlinkRJ45LED()
