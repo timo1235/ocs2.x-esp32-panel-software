@@ -28,8 +28,5 @@ The menu button on the pcb is not working due to the onboard led. So button4 as 
 - long press > 6 seconds: Reset the calibration config - like resetting to factory defaults
 
 # Changelog
-## version 2
-- Added possibility to control also output 1-4 of the open cnc shield with the buttons 1-3
-
-## version 1
-- initial version
+## 1.0.0
+- initial release
