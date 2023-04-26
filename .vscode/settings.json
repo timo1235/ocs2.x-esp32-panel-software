@@ -17,7 +17,8 @@
         "tuple": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "*.xbm": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
