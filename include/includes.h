@@ -35,6 +35,8 @@
 #include <Bounce2.h>
 // For saving things in the flash memory
 #include <Preferences.h>
+// Exponential Filtering of analog readings
+#include <Ewma.h>
 
 // DEBUG MACRO
 #ifdef OCS_DEBUG                                        // Macros are usually in all capital letters.

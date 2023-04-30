@@ -320,17 +320,11 @@ void IOCONTROL::readAll() {
         dataToControl.output4 = ioConfig.getGPIOByFunction(InputFunctions::func_output4)->read();
     }
     if (dataToControl.command.setJoystick) {
-        int32_t measurement[3] = {0, 0, 0};
-        // Read joystick with some samples to get a better value
-        for (uint8_t i = 0; i < sampleCount; i++) {
-            measurement[0] += ioConfig.getGPIOByFunction(InputFunctions::func_joystickX)->read();
-            measurement[1] += ioConfig.getGPIOByFunction(InputFunctions::func_joystickY)->read();
-            measurement[2] += ioConfig.getGPIOByFunction(InputFunctions::func_joystickZ)->read();
-            delayMicroseconds(sampleDelay_Micros);
-        }
-        measurement[0] /= sampleCount;
-        measurement[1] /= sampleCount;
-        measurement[2] /= sampleCount;
+        int32_t measurement[3] = {
+            ioConfig.getGPIOByFunction(InputFunctions::func_joystickX)->read(),
+            ioConfig.getGPIOByFunction(InputFunctions::func_joystickY)->read(),
+            ioConfig.getGPIOByFunction(InputFunctions::func_joystickZ)->read()
+            };
 
         for (uint8_t i = 0; i < 3; i++) {
             // Add offset
@@ -356,28 +350,14 @@ void IOCONTROL::readAll() {
         // DPRINTLN("\tJoystick Z(" + String(calibrationConfig.joystickAxes[2]) + "): \t" + String(dataToControl.joystickZ));
     }
     if (dataToControl.command.setFeedrate) {
-        uint32_t feedrate = 0;
-        for (uint8_t i = 0; i < sampleCount; i++) {
-            feedrate += ioConfig.getGPIOByFunction(InputFunctions::func_feedrate)->read();
-            ;
-            delayMicroseconds(sampleDelay_Micros);
-        }
-        feedrate /= sampleCount;
-
+        uint32_t feedrate =  ioConfig.getGPIOByFunction(InputFunctions::func_feedrate)->read();
         if (calibrationConfig.invertFeedrate) {
             feedrate = 4095 - feedrate;
         }
         dataToControl.feedrate = map(feedrate, 0, 4095, 0, 1023);
     }
     if (dataToControl.command.setRotationSpeed) {
-        uint32_t rotationSpeed = 0;
-        for (uint8_t i = 0; i < sampleCount; i++) {
-            rotationSpeed += ioConfig.getGPIOByFunction(InputFunctions::func_rotationSpeed)->read();
-            ;
-            delayMicroseconds(sampleDelay_Micros);
-        }
-        rotationSpeed /= sampleCount;
-
+        uint32_t rotationSpeed =  ioConfig.getGPIOByFunction(InputFunctions::func_rotationSpeed)->read();
         if (calibrationConfig.invertRotationSpeed) {
             rotationSpeed = 4095 - rotationSpeed;
         }
