@@ -20,6 +20,7 @@ typedef struct {
 typedef struct {
     InputFunctions inputs[16];
     DisplayMode    displayMode;
+    bool           wifiDefaultOn;
 } CONFIGURATION;
 
 extern CALIBRATION_CONFIG calibrationConfig;

@@ -42,13 +42,16 @@ void IOCONTROL::loopTask(void *pvParameters) {
 }
 
 void IOCONTROL::handleMenuButton() {
-    // Button is released and was pressed for some time
+    // Check menu button on the pcb
     if (buttonMenu.rose()) {
         // Handle short press
-        DPRINTLN("Restarting ESP");
-        WiFi.disconnect();
-        WiFi.mode(WIFI_OFF);
-        ESP.restart();
+        uiHandler.setup();
+    }
+
+    if (ioConfig.hasFunction(InputFunctions::func_menu)) {
+        if (ioConfig.getGPIOByFunction(InputFunctions::func_menu)->button.rose()) {
+            uiHandler.setup();
+        }
     }
 }
 
@@ -320,11 +323,9 @@ void IOCONTROL::readAll() {
         dataToControl.output4 = ioConfig.getGPIOByFunction(InputFunctions::func_output4)->read();
     }
     if (dataToControl.command.setJoystick) {
-        int32_t measurement[3] = {
-            ioConfig.getGPIOByFunction(InputFunctions::func_joystickX)->read(),
-            ioConfig.getGPIOByFunction(InputFunctions::func_joystickY)->read(),
-            ioConfig.getGPIOByFunction(InputFunctions::func_joystickZ)->read()
-            };
+        int32_t measurement[3] = {ioConfig.getGPIOByFunction(InputFunctions::func_joystickX)->read(),
+                                  ioConfig.getGPIOByFunction(InputFunctions::func_joystickY)->read(),
+                                  ioConfig.getGPIOByFunction(InputFunctions::func_joystickZ)->read()};
 
         for (uint8_t i = 0; i < 3; i++) {
             // Add offset
@@ -350,14 +351,14 @@ void IOCONTROL::readAll() {
         // DPRINTLN("\tJoystick Z(" + String(calibrationConfig.joystickAxes[2]) + "): \t" + String(dataToControl.joystickZ));
     }
     if (dataToControl.command.setFeedrate) {
-        uint32_t feedrate =  ioConfig.getGPIOByFunction(InputFunctions::func_feedrate)->read();
+        uint32_t feedrate = ioConfig.getGPIOByFunction(InputFunctions::func_feedrate)->read();
         if (calibrationConfig.invertFeedrate) {
             feedrate = 4095 - feedrate;
         }
         dataToControl.feedrate = map(feedrate, 0, 4095, 0, 1023);
     }
     if (dataToControl.command.setRotationSpeed) {
-        uint32_t rotationSpeed =  ioConfig.getGPIOByFunction(InputFunctions::func_rotationSpeed)->read();
+        uint32_t rotationSpeed = ioConfig.getGPIOByFunction(InputFunctions::func_rotationSpeed)->read();
         if (calibrationConfig.invertRotationSpeed) {
             rotationSpeed = 4095 - rotationSpeed;
         }
