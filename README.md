@@ -71,6 +71,7 @@ The menu button can be used to start the wifi hotspot and webinterface manually.
 
 - Added webinterface config option to disable the webinterface
 - Used menu button to start the webinterface manually
+- Added exponential filter for analog inputs, this should reduce the jittering of the analog inputs
 
 ## 2.0.0
 
