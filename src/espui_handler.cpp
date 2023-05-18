@@ -48,6 +48,8 @@ void displayModeCallback(Control *sender, int type) {
     mainConfig.displayMode = (DisplayMode) displayModeIndex;
 }
 
+void wifiModeCallback(Control *sender, int type) { mainConfig.wifiDefaultOn = sender->value == "1" ? true : false; }
+
 void saveAndRestartCallback(Control *sender, int type) {
     configManager.saveMainConfig();
     WiFi.disconnect();
@@ -82,6 +84,7 @@ IPAddress  apIP(192, 168, 4, 1);
 DNSServer  dnsServer;
 
 void UIHANDLER::setup() {
+    WiFi.mode(WIFI_AP_STA);
     // ESPUI.setVerbosity(Verbosity::VerboseJSON);
     WiFi.setHostname(hostname);
     Serial.print("Creating hotspot");
@@ -357,7 +360,15 @@ void UIHANDLER::setup() {
     for (auto const &v : displayModeMapping) {
         ESPUI.addControl(Option, v.c_str(), v, None, displayMode);
     }
-
+    // Wifi default on
+    String labelText =
+        "Wifi default on"
+        "<br/><br/><small>When enabled, the Wifi Hotspot will be started automatically on boot.</small>"
+        "<br/><br/><small>When disabled, the Wifi Hotspot will be started only when the menu button on the PCB is pressed</small>";
+    uint16_t label = ESPUI.addControl(Label, "Wifi Hotspot", labelText, Carrot, editConfigurationTab);
+    ESPUI.setElementStyle(label, clearLabelStyle);
+    String state = mainConfig.wifiDefaultOn ? "1" : "0";
+    ESPUI.addControl(Switcher, "", state, Dark, label, &wifiModeCallback);
     // Actions
     ESPUI.addControl(Separator, "Actions ", "", None, editConfigurationTab);
 

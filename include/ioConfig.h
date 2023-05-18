@@ -2,6 +2,7 @@
 // Import structs etc from espui_handler.h
 // #include <espui_handler.h>
 #include <Bounce2.h>
+#include <Ewma.h>
 
 // These are the inputs of the pcb
 enum Inputs {
@@ -127,14 +128,15 @@ enum GPIO_TYPE {
 class GPIO_CLASS {
   private:
     bool         active = false;
-    static void  buttonUpdateTask(void *pvParameters);
-    TaskHandle_t buttonTaskHandle;
+    static void  updateTask(void *pvParameters);
+    TaskHandle_t taskHandle;
 
   public:
     InputFunctions function;
     GPIO_TYPE      type;
     uint8_t        pin;
-    Bounce         button = Bounce();
+    Bounce         button       = Bounce();
+    Ewma           analogFilter = Ewma(0.1);
 
     void setPin(uint8_t pin);
     void setFunction(InputFunctions function);

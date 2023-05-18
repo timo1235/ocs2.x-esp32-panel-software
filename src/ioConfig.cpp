@@ -2,10 +2,20 @@
 
 IOCONFIG ioConfig;
 
-void GPIO_CLASS::buttonUpdateTask(void *pvParameters) {
+void GPIO_CLASS::updateTask(void *pvParameters) {
     auto *gpio = (GPIO_CLASS *) pvParameters;
     for (;;) {
-        gpio->button.update();
+        switch (gpio->type) {
+        case GPIO_TYPE::GPIO_TYPE_INPUT_PULLUP_BOUNCE:
+            gpio->button.update();
+            break;
+        case GPIO_TYPE::GPIO_TYPE_ANALOG:
+            gpio->analogFilter.filter(analogRead(gpio->pin));
+            break;
+        default:
+            break;
+        }
+
         vTaskDelay(3);
     }
 }
@@ -17,6 +27,10 @@ void GPIO_CLASS::init() {
     case GPIO_TYPE::GPIO_TYPE_INPUT:
         pinMode(this->pin, INPUT);
         break;
+    case GPIO_TYPE::GPIO_TYPE_ANALOG:
+        pinMode(this->pin, INPUT);
+        xTaskCreatePinnedToCore(GPIO_CLASS::updateTask, "GPIO Update", 1500, this, 1, &taskHandle, 0);
+        break;
     case GPIO_TYPE::GPIO_TYPE_INPUT_PULLUP:
         pinMode(this->pin, INPUT_PULLUP);
         break;
@@ -27,7 +41,7 @@ void GPIO_CLASS::init() {
         this->button.attach(this->pin, INPUT_PULLUP);
         this->button.interval(10);
         // Task updates the button state regulary
-        xTaskCreatePinnedToCore(GPIO_CLASS::buttonUpdateTask, "Button Update", 1500, this, 1, &buttonTaskHandle, 0);
+        xTaskCreatePinnedToCore(GPIO_CLASS::updateTask, "GPIO Update", 1500, this, 1, &taskHandle, 0);
         break;
     default:
         break;
@@ -47,11 +61,11 @@ uint16_t GPIO_CLASS::read() {
         return !digitalRead(this->pin);
         break;
     case GPIO_TYPE::GPIO_TYPE_INPUT_PULLUP_BOUNCE:
-        this->button.update();
         return !this->button.read();
         break;
     case GPIO_TYPE::GPIO_TYPE_ANALOG:
-        return analogRead(this->pin);
+        return this->analogFilter.output;
+        // return analogRead(this->pin);
         break;
     default:
         return 0;

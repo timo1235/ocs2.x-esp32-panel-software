@@ -23,7 +23,7 @@ bool PROTOCOL::hasOCS2Functions    = false;
 bool PROTOCOL::hasColdEndFunctions = false;
 
 void PROTOCOL::setup() {
-    // WiFi.mode(WIFI_AP_STA);
+    WiFi.mode(WIFI_STA);
     DPRINT("My Mac Address: ");
     DPRINTLN(WiFi.macAddress());
 

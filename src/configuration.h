@@ -9,6 +9,8 @@
     { 0x5E, 0x0, 0x0, 0x0, 0x0, 0x5 }
 
 #define USE_WIFI_WEBINTERFACE   // Comment this line to disable the webinterface
+// #define FORCE_WIFI_DEFAULT_ON   // Uncomment this line to force the webinterface to be always on, useful if it has been deactivated in
+// the config and the menu button on the pcb does not work
 
 // Time in ms we wait between sending measured inputs
 // Typical values for different purposes:

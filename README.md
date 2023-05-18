@@ -59,13 +59,18 @@ This mode uses the same design as the original coldend display.
 
 ## Menu Button
 
-The menu button on the board has currently no special function. It just restarts the esp32.
+The menu button can be used to start the wifi hotspot and webinterface manually. This should be used if the webinterface is disabled in the configuration.
 
 ## To be done
 
 - implement connection over RJ45 - Serial communication
 
 # Changelog
+
+## 2.0.1
+
+- Added webinterface config option to disable the webinterface
+- Used menu button to start the webinterface manually
 
 ## 2.0.0
 
