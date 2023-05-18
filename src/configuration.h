@@ -14,10 +14,10 @@
 
 // Time in ms we wait between sending measured inputs
 // Typical values for different purposes:
-// - Control inputs like joystick or potentiometer: 25ms
+// - Control inputs like joystick or potentiometer: 40ms
 // - Only use display for information like temperatur or Autosquare state: 500ms
 // - Typical value for the coldend delay: 100ms
-#define OCS2_WIFI_DELAY    25
+#define OCS2_WIFI_DELAY    40
 #define COLDEND_WIFI_DELAY 100
 
 // Uncomment to enable debug messages over serial communication(usb)
