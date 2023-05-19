@@ -57,6 +57,52 @@ This mode uses the same design as the original open cnc shield 2 display.
 
 This mode uses the same design as the original coldend display.
 
+## Input Mapping
+
+### Default
+
+| PCB Input      | Function       |
+| -------------- | -------------- |
+| Joystick X     | Joystick X     |
+| Joystick Y     | Joystick Y     |
+| Joystick Z     | Joystick Z     |
+| Feedrate       | Feedrate       |
+| Rotation Speed | Rotation Speed |
+| OK             | OK Button      |
+| Autosquare     | Autosquare     |
+| Motor Start    | Motor Start    |
+| Programm Start | Programm Start |
+| Axis X Select  | Axis X Select  |
+| Axis Y Select  | Axis Y Select  |
+| Axis Z Select  | Axis Z Select  |
+| Button 1       | ENA            |
+| Button 2       | NONE           |
+| Button 3       | NONE           |
+| Button 4       | Menu           |
+
+## Recommendation for ColdEnd Usage
+
+| PCB Input      | Function            |
+| -------------- | ------------------- |
+| Joystick X     | Joystick X          |
+| Joystick Y     | Joystick Y          |
+| Joystick Z     | Joystick Z          |
+| Feedrate       | Feedrate            |
+| Rotation Speed | Rotation Speed      |
+| OK             | OK Button           |
+| Autosquare     | Autosquare          |
+| Motor Start    | Motor Start         |
+| Programm Start | ColdEnd Poti Mist   |
+| Axis X Select  | Programm Start      |
+| Axis Y Select  | None                |
+| Axis Z Select  | None                |
+| Button 1       | ENA                 |
+| Button 2       | ColdEnd Button Fast |
+| Button 3       | CodlEnd Button Mist |
+| Button 4       | ColdEnd Button Air  |
+
+Note: I dont use the ColdEnd Poti Spit function, because there are not enough analog inputs and I dont want to loose one of the other analog functions. But also, the Spit function is not really needed, as I set it once on the ColdEnd itself and then never change it again.
+
 ## Menu Button
 
 The menu button can be used to start the wifi hotspot and webinterface manually. This should be used if the webinterface is disabled in the configuration.
