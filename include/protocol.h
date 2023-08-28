@@ -25,7 +25,8 @@ typedef struct {
     unsigned returnACK : 1;   // Return ACK to client
     unsigned
         returnData : 1;   // Return mainboard data to client, this can be the temperature, autosquaring state and so son and replaces ACK
-    uint16_t updateInterval_MS;   // Interval in ms the client sends data to the mainboard
+    uint16_t updateInterval_MS;         // Interval in ms the client sends data to the mainboard
+    uint16_t updateIntervalSerial_MS;   // Interval in ms the client sends data to the mainboard
 } DATA_COMMAND;
 
 // This struct describes the auto square data
@@ -111,10 +112,13 @@ typedef struct {
 class PROTOCOL {
   public:
     void        setup();
+    void        setupESPNOW();
+    void        setupSerial();
     void        loop();
     static bool isOCS2Connected();
     static bool isColdEndConnected();
     void        initializeCommand();
+    static bool isSerialConnected();
 
     static char    *getMacStrFromAddress(uint8_t *address);
     static uint16_t getIntegerFromAddress(const uint8_t *address);
@@ -122,6 +126,8 @@ class PROTOCOL {
     static uint16_t failedOCS2MessagesSuccessively;
     static uint16_t successfulOCS2Messages;
     static uint16_t failedOCS2Messages;
+
+    static uint16_t OCS2MessageSerialReceived;
 
     static uint16_t failedColdEndMessagesSuccessively;
     static uint16_t successfulColdEndMessages;
@@ -136,13 +142,21 @@ class PROTOCOL {
     static void onDataSent(const uint8_t *address, esp_now_send_status_t status);
     static void onDataRecv(const uint8_t *address, const uint8_t *incomingData, int len);
 
-    uint32_t lastOCS2MessageSent_MS    = 0;
-    uint32_t lastColdEndMessageSent_MS = 0;
+    uint32_t lastOCS2WIFIMessageSent_MS   = 0;
+    uint32_t lastOCS2SerialMessageSent_MS = 0;
+    uint32_t lastColdEndMessageSent_MS    = 0;
 
     uint32_t lastStatusMessage_MS = 0;
 
     static void  loopTask(void *pvParameters);
     TaskHandle_t loopTaskHandle;
+
+    static void  serialTaskHandler(void *pvParameters);
+    TaskHandle_t serialTask;
+
+    static bool     serialConnected;
+    static uint32_t lastSerialPackageReceived;
+    static uint16_t serialConnectionTimeout_MS;
 };
 
 // Global variables

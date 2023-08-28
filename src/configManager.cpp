@@ -126,6 +126,7 @@ void CONFIGMANAGER::loadMainConfig() {
         mainConfig.inputs[Inputs::in_button4]            = InputFunctions::func_menu;
         mainConfig.displayMode                           = DisplayMode::display_default;
         mainConfig.wifiDefaultOn                         = true;
+        mainConfig.communicationMode                     = CommunicationMode::automatic;
     } else {
         size_t result                     = preferences.getBytes("main", &mainConfig, sizeof(mainConfig));
         CONFIGMANAGER::startConfigHotspot = false;
@@ -148,7 +149,8 @@ void CONFIGMANAGER::resetMainConfig() {
 }
 
 void CONFIGMANAGER::printMainConfig() {
-    String displayModeMapping[] = {"Default", "OCS2 only", "ColdEnd only"};
+    String displayModeMapping[]       = {"Default", "OCS2 only", "ColdEnd only"};
+    String communicationModeMapping[] = {"automatic(serial first)", "only serial", "only wifi"};
     DPRINTLN("Printing input to function mapping: ");
     DPRINTLN("Joystick X Input function: " + allInputFunctions[mainConfig.inputs[Inputs::in_joystickX]]);
     DPRINTLN("Joystick Y Input function: " + allInputFunctions[mainConfig.inputs[Inputs::in_joystickY]]);
@@ -168,4 +170,5 @@ void CONFIGMANAGER::printMainConfig() {
     DPRINTLN("Button 4 Input function: " + allInputFunctions[mainConfig.inputs[Inputs::in_button4]]);
     DPRINTLN("DisplayMode: " + displayModeMapping[mainConfig.displayMode]);
     DPRINTLN("Wifi default on: " + String(mainConfig.wifiDefaultOn));
+    DPRINTLN("Communication mode: " + communicationModeMapping[mainConfig.communicationMode]);
 }

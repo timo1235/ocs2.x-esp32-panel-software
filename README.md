@@ -1,6 +1,6 @@
 # OPEN-CNC-Shield 2.x ESP32 Panel Software
 
-This project contains the software for an ESP32 handwheel as an remote control for the OPEN-CNC-Shield 2.x or/and the ColdEnd32 and is still under development.
+This project contains the software for an ESP32 handwheel as an remote control for the OPEN-CNC-Shield 2.x or/and the ColdEnd32.
 The corresponding ESP32 software of the OPEN-CNC-Shield ESP32 can be found here: [OPEN-CNC-Shield 2.x ESP32 Software](https://github.com/timo1235/ocs2.x-esp32-software).
 The corresponding ESP32 software of the ColdEnd32 can be found here: [ColdEnd32 fork with WiFi functionalities](https://github.com/timo1235/ColdEND32-WiFi).
 
@@ -20,6 +20,7 @@ The configuration is made in the webinterface of the ESP32. Just connect to the 
 - Show the current status on a i2c display
 - Calibrate all analog inputs like the joystick axes and feedrate and rotation speed poti
   - very useful if the axes are swaped or the middle position is not right
+- Choose or automatically switch between WiFi and Serial(RJ45) communication with the OPEN-CNC-Shield 2
 
 ## Webinterface
 
@@ -109,9 +110,15 @@ The menu button can be used to start the wifi hotspot and webinterface manually.
 
 ## To be done
 
-- implement connection over RJ45 - Serial communication
-
 # Changelog
+
+## 2.0.2
+
+- Added serial communication over RJ45
+- Added webinterface config option to control the communication
+  - automatic: automatically switch between WiFi and Serial communication. While serial has a higher priority. If serial connection is established, the WiFi connection is closed.
+  - wifi only
+  - serial only
 
 ## 2.0.1
 

@@ -5,7 +5,7 @@
 const char *hostname = "ESP32-Panel";
 
 // Ui handles
-uint16_t uiHandles[16], displayMode;
+uint16_t uiHandles[16], displayMode, communicationMode;
 // Analog inputs
 uint16_t firstElement, sliderXAxis, sliderYAxis, sliderZAxis, sliderFeedrate, sliderRotationSpeed, sliderColdEndMist, sliderColdEndSpit;
 // Tabs
@@ -20,10 +20,11 @@ uint16_t firstButton, okButton, autosquareButton, motorStartButton, programmStar
 String emeraldColor  = "background-color: #2FCC71;";
 String alizarinColor = "background-color: #E74C3C;";
 
-static String axeMapping[]             = {"X", "Y", "Z"};
-static String invertAxisMapping[]      = {"no", "yes"};
-static String autosquareStateMapping[] = {"unknown", "squared", "finished", "not active"};
-static String displayModeMapping[]     = {"Default", "OCS2 only", "ColdEnd only"};
+static String axeMapping[]               = {"X", "Y", "Z"};
+static String invertAxisMapping[]        = {"no", "yes"};
+static String autosquareStateMapping[]   = {"unknown", "squared", "finished", "not active"};
+static String displayModeMapping[]       = {"Default", "OCS2 only", "ColdEnd only"};
+static String communicationModeMapping[] = {"automatic(serial first)", "only serial", "only wifi"};
 
 void emptyCallback(Control *sender, int type) {
     Serial.print("CB: id(");
@@ -46,6 +47,18 @@ void displayModeCallback(Control *sender, int type) {
         }
     }
     mainConfig.displayMode = (DisplayMode) displayModeIndex;
+}
+
+void communicationModeCallback(Control *sender, int type) {
+    // map value to a function
+    byte index = 99;
+    for (byte i = 0; i < 3; i++) {
+        if (sender->value == communicationModeMapping[i]) {
+            index = i;
+            break;
+        }
+    }
+    mainConfig.communicationMode = (CommunicationMode) index;
 }
 
 void wifiModeCallback(Control *sender, int type) { mainConfig.wifiDefaultOn = sender->value == "1" ? true : false; }
@@ -359,6 +372,13 @@ void UIHANDLER::setup() {
                                    displayModeMapping[mainConfig.displayMode], Wetasphalt, editConfigurationTab, &displayModeCallback);
     for (auto const &v : displayModeMapping) {
         ESPUI.addControl(Option, v.c_str(), v, None, displayMode);
+    }
+    // Communication
+    ESPUI.addControl(Separator, "Communication Settings ", "", None, editConfigurationTab);
+    communicationMode = ESPUI.addControl(Select, "Communication Mode to OCS2.", communicationModeMapping[mainConfig.communicationMode],
+                                         Wetasphalt, editConfigurationTab, &communicationModeCallback);
+    for (auto const &v : communicationModeMapping) {
+        ESPUI.addControl(Option, v.c_str(), v, None, communicationMode);
     }
     // Wifi default on
     String labelText =

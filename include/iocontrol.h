@@ -5,7 +5,7 @@
 #include <configManager.h>
 #include <ioConfig.h>
 
-#define READ_INPUT_INTERVAL_MS                           100
+#define READ_INPUT_INTERVAL_MS                           40
 #define TIME_TO_PRESS_BUTTON_BEFORE_CALIBRATION_MS       3000
 #define TIME_TO_PRESS_BUTTON_BEFORE_RESET_CALIBRATION_MS 6000
 
@@ -28,7 +28,7 @@ class IOCONTROL {
     TaskHandle_t calibrationTaskHandle;
 
     // Input debouncing
-    Bounce buttonMenu           = Bounce();
+    Bounce buttonMenu = Bounce();
     void   handleMenuButton();
 
     uint32_t      lastReadAll_MS = 0;

@@ -13,14 +13,21 @@ typedef struct {
     bool    invertColdEndSpitPoti;
 } CALIBRATION_CONFIG;
 
+enum CommunicationMode {
+    automatic,
+    onlySerial,
+    onlyWifi,
+};
+
 // Configuration for the inputs
 // There are 17 inputs which can be mapped to functions
 // Example: inputs[0](Inputs::in_joystickX) mapped to InputFunctions::func_ok that means,
 // the input joystickX is mapped to the function ok
 typedef struct {
-    InputFunctions inputs[16];
-    DisplayMode    displayMode;
-    bool           wifiDefaultOn;
+    InputFunctions    inputs[16];
+    DisplayMode       displayMode;
+    bool              wifiDefaultOn;
+    CommunicationMode communicationMode;
 } CONFIGURATION;
 
 extern CALIBRATION_CONFIG calibrationConfig;

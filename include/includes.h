@@ -37,12 +37,14 @@
 #include <Preferences.h>
 // Exponential Filtering of analog readings
 #include <Ewma.h>
+// Serial Transfer library
+#include "SerialTransfer.h"
 
 // DEBUG MACRO
 #ifdef OCS_DEBUG                                        // Macros are usually in all capital letters.
     #define DPRINT(...)   Serial.print(__VA_ARGS__)     // DPRINT is a macro, debug print
     #define DPRINTLN(...) Serial.println(__VA_ARGS__)   // DPRINTLN is a macro, debug print with new line
 #else
-    #define DPRINT(...)                                 // now defines a blank line
-    #define DPRINTLN(...)                               // now defines a blank line
+    #define DPRINT(...)     // now defines a blank line
+    #define DPRINTLN(...)   // now defines a blank line
 #endif

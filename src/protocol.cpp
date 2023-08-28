@@ -15,6 +15,8 @@ uint16_t PROTOCOL::failedOCS2MessagesSuccessively = 0;
 uint16_t PROTOCOL::successfulOCS2Messages         = 0;
 uint16_t PROTOCOL::failedOCS2Messages             = 0;
 
+uint16_t PROTOCOL::OCS2MessageSerialReceived = 0;
+
 uint16_t PROTOCOL::failedColdEndMessagesSuccessively = 0;
 uint16_t PROTOCOL::successfulColdEndMessages         = 0;
 uint16_t PROTOCOL::failedColdEndMessages             = 0;
@@ -22,7 +24,65 @@ uint16_t PROTOCOL::failedColdEndMessages             = 0;
 bool PROTOCOL::hasOCS2Functions    = false;
 bool PROTOCOL::hasColdEndFunctions = false;
 
+bool           PROTOCOL::serialConnected;
+uint32_t       PROTOCOL::lastSerialPackageReceived;
+uint16_t       PROTOCOL::serialConnectionTimeout_MS = OCS2_SERIAL_DELAY;
+HardwareSerial SerialPort(2);
+SerialTransfer myTransfer;
+
 void PROTOCOL::setup() {
+    if (mainConfig.communicationMode != CommunicationMode::onlyWifi) {
+        PROTOCOL::setupSerial();
+    }
+    if (mainConfig.communicationMode != CommunicationMode::onlySerial) {
+        PROTOCOL::setupESPNOW();
+    }
+}
+
+void PROTOCOL::setupSerial() {
+    SerialPort.begin(115200, SERIAL_8N1, 16, 17);
+    myTransfer.begin(SerialPort);
+
+    // Create a task for the protocol
+    xTaskCreatePinnedToCore(PROTOCOL::serialTaskHandler, /* Task function. */
+                            "Protocol serial task",      /* name of task. */
+                            10000,                       /* Stack size of task */
+                            this,                        /* parameter of the task */
+                            tskIDLE_PRIORITY,            /* priority of the task */
+                            &serialTask,                 /* Task handle to keep track of created task */
+                            0);
+}
+
+void PROTOCOL::serialTaskHandler(void *pvParameters) {
+    auto *protocol = (PROTOCOL *) pvParameters;
+    for (;;) {
+        if (myTransfer.available()) {
+            myTransfer.rxObj(dataToClient);
+            // We got a message from the controller, so we know it is connected
+            if (PROTOCOL::serialConnected == false) {
+                PROTOCOL::serialConnected = true;
+                DPRINTLN("Serial: Handwheel connection established. Stoppig WiFi communication.");
+                ioControl.startBlinkRJ45LED();
+            }
+            PROTOCOL::lastSerialPackageReceived = millis();
+            OCS2MessageSerialReceived++;
+        }
+        // Send data to controller
+        if (millis() - protocol->lastOCS2SerialMessageSent_MS > OCS2_SERIAL_DELAY && !ioControl.calibrationInProgress &&
+            PROTOCOL::hasOCS2Functions) {
+            myTransfer.sendDatum(dataToControl);
+            protocol->lastOCS2SerialMessageSent_MS = millis();
+        }
+        if (PROTOCOL::isSerialConnected() && millis() - PROTOCOL::lastSerialPackageReceived > PROTOCOL::serialConnectionTimeout_MS * 4) {
+            PROTOCOL::serialConnected = false;
+            DPRINTLN("Serial: Handwheel connection timed out. Starting WiFi communication if it is enabled.");
+            ioControl.stopBlinkRJ45LED();
+        }
+    }
+    vTaskDelay(1);
+}
+
+void PROTOCOL::setupESPNOW() {
     WiFi.mode(WIFI_STA);
     DPRINT("My Mac Address: ");
     DPRINTLN(WiFi.macAddress());
@@ -68,9 +128,9 @@ void PROTOCOL::loopTask(void *pvParameters) {
     auto *protocol = (PROTOCOL *) pvParameters;
     for (;;) {
         // Send data to controller
-        if (millis() - protocol->lastOCS2MessageSent_MS > OCS2_WIFI_DELAY && !ioControl.calibrationInProgress &&
-            PROTOCOL::hasOCS2Functions) {
-            protocol->lastOCS2MessageSent_MS = millis();
+        if (millis() - protocol->lastOCS2WIFIMessageSent_MS > OCS2_WIFI_DELAY && !ioControl.calibrationInProgress &&
+            PROTOCOL::hasOCS2Functions && !PROTOCOL::isSerialConnected()) {
+            protocol->lastOCS2WIFIMessageSent_MS = millis();
             protocol->sendMessageToController();
         }
         if (millis() - protocol->lastColdEndMessageSent_MS > COLDEND_WIFI_DELAY && !ioControl.calibrationInProgress &&
@@ -110,6 +170,13 @@ void PROTOCOL::loopTask(void *pvParameters) {
             }
             PROTOCOL::failedColdEndMessages     = 0;
             PROTOCOL::successfulColdEndMessages = 0;
+
+            // Serial Messages
+            DPRINT("Controller serial connection:\tOK, messages received: " + String(PROTOCOL::OCS2MessageSerialReceived));
+            DPRINTLN(", in " + String(STATUS_MESSAGE_INTERVAL_MS / 1000) + " seconds");
+
+            PROTOCOL::OCS2MessageSerialReceived = 0;
+
             DPRINTLN("----------------------------------------");
         }
         vTaskDelay(5);
@@ -125,20 +192,21 @@ void PROTOCOL::initializeCommand() {
     dataToControl.command.setAutosquare    = ioConfig.hasFunction(InputFunctions::func_autosquare);
     bool hasAxisSelect = ioConfig.hasFunction(InputFunctions::func_axisXSelect) && ioConfig.hasFunction(InputFunctions::func_axisYSelect) &&
                          ioConfig.hasFunction(InputFunctions::func_axisZSelect);
-    dataToControl.command.setAxisSelect     = hasAxisSelect;
-    dataToControl.command.setOk             = ioConfig.hasFunction(InputFunctions::func_ok);
-    dataToControl.command.setProgramStart   = ioConfig.hasFunction(InputFunctions::func_programStart);
-    dataToControl.command.setMotorStart     = ioConfig.hasFunction(InputFunctions::func_motorStart);
-    dataToControl.command.setEna            = ioConfig.hasFunction(InputFunctions::func_ena);
-    dataToControl.command.setSpeed1         = ioConfig.hasFunction(InputFunctions::func_speed1);
-    dataToControl.command.setSpeed2         = ioConfig.hasFunction(InputFunctions::func_speed2);
-    dataToControl.command.setOutput1        = ioConfig.hasFunction(InputFunctions::func_output1);
-    dataToControl.command.setOutput2        = ioConfig.hasFunction(InputFunctions::func_output2);
-    dataToControl.command.setOutput3        = ioConfig.hasFunction(InputFunctions::func_output3);
-    dataToControl.command.setOutput4        = ioConfig.hasFunction(InputFunctions::func_output4);
-    dataToControl.command.returnACK         = 1;
-    dataToControl.command.returnData        = 1;
-    dataToControl.command.updateInterval_MS = OCS2_WIFI_DELAY;
+    dataToControl.command.setAxisSelect           = hasAxisSelect;
+    dataToControl.command.setOk                   = ioConfig.hasFunction(InputFunctions::func_ok);
+    dataToControl.command.setProgramStart         = ioConfig.hasFunction(InputFunctions::func_programStart);
+    dataToControl.command.setMotorStart           = ioConfig.hasFunction(InputFunctions::func_motorStart);
+    dataToControl.command.setEna                  = ioConfig.hasFunction(InputFunctions::func_ena);
+    dataToControl.command.setSpeed1               = ioConfig.hasFunction(InputFunctions::func_speed1);
+    dataToControl.command.setSpeed2               = ioConfig.hasFunction(InputFunctions::func_speed2);
+    dataToControl.command.setOutput1              = ioConfig.hasFunction(InputFunctions::func_output1);
+    dataToControl.command.setOutput2              = ioConfig.hasFunction(InputFunctions::func_output2);
+    dataToControl.command.setOutput3              = ioConfig.hasFunction(InputFunctions::func_output3);
+    dataToControl.command.setOutput4              = ioConfig.hasFunction(InputFunctions::func_output4);
+    dataToControl.command.returnACK               = 1;
+    dataToControl.command.returnData              = 1;
+    dataToControl.command.updateInterval_MS       = OCS2_WIFI_DELAY;
+    dataToControl.command.updateIntervalSerial_MS = OCS2_SERIAL_DELAY;
 
     dataToColdEnd.command.setPotMist        = ioConfig.hasFunction(InputFunctions::func_coldend_pot_mist);
     dataToColdEnd.command.setPotSpit        = ioConfig.hasFunction(InputFunctions::func_coldend_pot_spit);
@@ -236,6 +304,8 @@ void PROTOCOL::onDataRecv(const uint8_t *address, const uint8_t *incomingData, i
         }
     }
 }
+
+bool PROTOCOL::isSerialConnected() { return PROTOCOL::serialConnected; }
 
 bool PROTOCOL::isOCS2Connected() {
     if (dataToClient.peerIgnored || PROTOCOL::failedOCS2MessagesSuccessively >= 5) {
