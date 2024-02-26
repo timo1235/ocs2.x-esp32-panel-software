@@ -78,8 +78,8 @@ void PROTOCOL::serialTaskHandler(void *pvParameters) {
             DPRINTLN("Serial: Handwheel connection timed out. Starting WiFi communication if it is enabled.");
             ioControl.stopBlinkRJ45LED();
         }
+        vTaskDelay(1);
     }
-    vTaskDelay(1);
 }
 
 void PROTOCOL::setupESPNOW() {
@@ -178,8 +178,8 @@ void PROTOCOL::loopTask(void *pvParameters) {
             PROTOCOL::OCS2MessageSerialReceived = 0;
 
             DPRINTLN("----------------------------------------");
+            vTaskDelay(5);
         }
-        vTaskDelay(5);
     }
 }
 
