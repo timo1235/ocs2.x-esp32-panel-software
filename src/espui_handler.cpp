@@ -389,6 +389,10 @@ void UIHANDLER::setup() {
     ESPUI.setElementStyle(label, clearLabelStyle);
     String state = mainConfig.wifiDefaultOn ? "1" : "0";
     ESPUI.addControl(Switcher, "", state, Dark, label, &wifiModeCallback);
+    // OCS2 Mac Address
+    ESPUI.addControl(Number, "OCS2 Wireless ID(0-255) - Has to match the setting in the OCS2 ESP32 - default 0",
+                     String(mainConfig.ocs2MacAddressCustomByte), Wetasphalt, editConfigurationTab,
+                     [](Control *sender, int type) { mainConfig.ocs2MacAddressCustomByte = sender->value.toInt(); });
     // Actions
     ESPUI.addControl(Separator, "Actions ", "", None, editConfigurationTab);
 

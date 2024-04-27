@@ -1,8 +1,7 @@
 #include <includes.h>
 
-uint8_t         controllerMacAddress[] = CONTROLLER_MAC_ADDRESS;
-DATA_TO_CONTROL dataToControl          = {OCS_PANEL_SOFTWARE_VERSION, 512, 512, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-DATA_TO_CLIENT  dataToClient           = {};
+DATA_TO_CONTROL dataToControl = {OCS_PANEL_SOFTWARE_VERSION, 512, 512, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+DATA_TO_CLIENT  dataToClient  = {};
 
 uint8_t                coldEndMacAddress[] = COLDEND_MAC_ADDRESS;
 DATA_TO_COLDEND        dataToColdEnd       = {};
@@ -29,6 +28,8 @@ uint32_t       PROTOCOL::lastSerialPackageReceived;
 uint16_t       PROTOCOL::serialConnectionTimeout_MS = OCS2_SERIAL_DELAY;
 HardwareSerial SerialPort(2);
 SerialTransfer myTransfer;
+
+uint8_t controllerMacAddress[6] = {0x5E, 0x0, 0x0, 0x0, 0x0, 0x1};
 
 void PROTOCOL::setup() {
     if (mainConfig.communicationMode != CommunicationMode::onlyWifi) {
@@ -84,11 +85,12 @@ void PROTOCOL::serialTaskHandler(void *pvParameters) {
 
 void PROTOCOL::setupESPNOW() {
     WiFi.mode(WIFI_STA);
-    DPRINT("My Mac Address: ");
-    DPRINTLN(WiFi.macAddress());
 
     // Controller MAC Address
-    DPRINT("Controller Mac Address: ");
+    DPRINT("My Mac Address: ");
+    DPRINTLN(WiFi.macAddress());
+    controllerMacAddress[4] = mainConfig.ocs2MacAddressCustomByte;
+    DPRINT("Controller(OCS2) Mac Address: ");
     DPRINTLN(PROTOCOL::getMacStrFromAddress(controllerMacAddress));
     DPRINT("ColdEnd Mac Address: ");
     DPRINTLN(PROTOCOL::getMacStrFromAddress(coldEndMacAddress));

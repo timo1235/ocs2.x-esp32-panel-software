@@ -28,6 +28,7 @@ typedef struct {
     DisplayMode       displayMode;
     bool              wifiDefaultOn;
     CommunicationMode communicationMode;
+    uint8_t           ocs2MacAddressCustomByte;   // Wireless Address of the OCS2
 } CONFIGURATION;
 
 extern CALIBRATION_CONFIG calibrationConfig;

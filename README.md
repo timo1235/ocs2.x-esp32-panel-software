@@ -4,7 +4,10 @@ This project contains the software for an ESP32 handwheel as an remote control f
 The corresponding ESP32 software of the OPEN-CNC-Shield ESP32 can be found here: [OPEN-CNC-Shield 2.x ESP32 Software](https://github.com/timo1235/ocs2.x-esp32-software).
 The corresponding ESP32 software of the ColdEnd32 can be found here: [ColdEnd32 fork with WiFi functionalities](https://github.com/timo1235/ColdEND32-WiFi).
 
-## Howto install
+## Howto install - Web flasher
+Visit the [Firmware installer page](https://timo1235.github.io/ocs2.x-esp32-panel-software/) and follow the steps. No compiling etc required.
+
+## Howto install - VSCode - old way
 
 Open this project folder in VS Code with PlatformIO IDE and upload it to the ESP32. A good documentation how to get the IDE up and running can be found here:
 [Getting Started with VS Code and PlatformIO IDE](https://randomnerdtutorials.com/vs-code-platformio-ide-esp32-esp8266-arduino/)
@@ -26,10 +29,10 @@ The configuration is made in the webinterface of the ESP32. Just connect to the 
 
 The webinterface is automatically started after the software is uploaded to the esp32. You can connect to the esp32 via WiFi - it creates an hotspot named like `ESP32-Panel-XXXXXX`. Connect to that hotspot and open the browser, if I does not start automatically. The address of the webinterface should be http://192.168.4.1.
 
-<img src="assets/webinterface_status.png" width="300" />
-<img src="assets/webinterface_show_configuration.png" width="300" />
-<img src="assets/webinterface_edit_configuration.png" width="800" />
-<img src="assets/webinterface_calibration.png" width="300" />
+<img src="docs/assets/webinterface_status.png" width="300" />
+<img src="docs/assets/webinterface_show_configuration.png" width="300" />
+<img src="docs/assets/webinterface_edit_configuration.png" width="800" />
+<img src="docs/assets/webinterface_calibration.png" width="300" />
 
 ### Disable webinterface
 
@@ -42,19 +45,19 @@ Just change the value in the webinterface on the `Edit Configuration` tab.
 
 ### Default display mode
 
-<img src="assets/display_default.png" width="300" />
+<img src="docs/assets/display_default.png" width="300" />
 
 In this mode the display will automatically adjust. The picture shows the display state if the open cnc shield 2 is connected and the coldend is also connected. If there are no functions defined for the coldend in the input configuration, the display will switch to the open cnc shield 2 only mode. Vice-Versa if there are no open cnc shield 2 funtions defined in the input configuration, the display will switch to the coldend only mode.
 
 ### Open CNC Shield 2 only mode
 
-<img src="assets/display_ocs2_only.png" width="300" />
+<img src="docs/assets/display_ocs2_only.png" width="300" />
 
 This mode uses the same design as the original open cnc shield 2 display.
 
 ### ColdEnd only mode
 
-<img src="assets/display_coldend_only.png" width="300" />
+<img src="docs/assets/display_coldend_only.png" width="300" />
 
 This mode uses the same design as the original coldend display.
 
@@ -111,6 +114,10 @@ The menu button can be used to start the wifi hotspot and webinterface manually.
 ## To be done
 
 # Changelog
+
+## 2.0.3
+- Added Firmware flash tool 
+- Added wireless ID to the webinterface configuration
 
 ## 2.0.2
 

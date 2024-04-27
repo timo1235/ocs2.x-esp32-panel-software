@@ -1,0 +1,25 @@
+{
+  "name": "ocs2.x-esp32-panel-software",
+  "description": "This project contains the software for an ESP32 handwheel as an remote control for the OPEN-CNC-Shield 2.x or/and the ColdEnd32.",
+  "authors": [
+    {
+      "name": "Timo Altholtmann",
+      "email": "blog@altholtmann.com",
+      "maintainer": true
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timo1235/ocs2.x-esp32-panel-software"
+  },
+  "version": "2.0.3",
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms": "*",
+  "scripts": {
+    "dev": "http-server docs"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}

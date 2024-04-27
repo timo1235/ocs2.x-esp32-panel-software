@@ -293,7 +293,7 @@ void DISPLAYMANAGER::showDefaultColdendOnlyScreen() {
         digits     = 1;    // If value < 10, display as float with one decimal place
         cursor_pos = 50;   // Set cursor depending on string length
     } else if (mist_val < 100) {
-        digits     = 0;    // Display rounded to int
+        digits     = 0;   // Display rounded to int
         cursor_pos = 41;
     } else {
         digits     = 0;

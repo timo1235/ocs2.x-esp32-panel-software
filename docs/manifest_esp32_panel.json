@@ -1,0 +1,17 @@
+{
+    "name": "ESP32-Panel Fimware",
+    "version": "latest",
+    "new_install_prompt_erase": false,
+    "builds": [
+        {
+            "chipFamily": "ESP32",
+            "improv": false,
+            "parts": [
+                {
+                    "path": "firmware/esp32_panel_latest.bin",
+                    "offset": "0x0"
+                }
+            ]
+        }
+    ]
+}

@@ -1,9 +1,5 @@
 #pragma once
 
-// This mac address has to match the mac address of the ESP32 on the OPEN-CNC-Shield 2
-#define CONTROLLER_MAC_ADDRESS                                                                                                             \
-    { 0x5E, 0x0, 0x0, 0x0, 0x0, 0x1 }
-
 // This mac address has to match the mac address of the ESP32 on the ColdEnd32
 #define COLDEND_MAC_ADDRESS                                                                                                                \
     { 0x5E, 0x0, 0x0, 0x0, 0x0, 0x5 }
