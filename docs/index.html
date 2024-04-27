@@ -119,10 +119,10 @@
                         <a href="https://shop.altholtmann.com/ESP32-Panel-Platine/SW10030">ESP32 Panel PCB</a> with an
                         ESP32Devkit V1
                         <strong>or</strong>
+                    </li>
                     <li> <a href="https://shop.altholtmann.com/ESP32-Panel-Integrated-Battery-Platine/SW10043">ESP32
                             Panel Integrated Battery</a> with an ESP32Devkit V1
 
-                    </li>
                     </li>
                     <li><strong>Google Chrome Browser </strong>- others might also work with WebSerial</li>
                     <li>Maybe driver for your PC -> google for ESP32 driver and install them</li>
@@ -169,53 +169,62 @@
                     alt="Webinterface">
             </div>
             <div class="tab-pane fade" id="german-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                <p class="lead">Der Installer kann verwendet werden, um die OCS2-Firmware auf einem ESP32 zu
-                    installieren, ohne dass eine IDE oder das Kompilieren des Quellcodes benötigt wird. Verbinden Sie
-                    einfach den ESP32 mit dem Computer und klicken Sie auf "Verbinden".</p>
-
+                <p class="lead">Der Installer kann verwendet werden, um die ESP32_Panel Firmware auf einem ESP32 zu
+                    installieren, ohne dass eine IDE oder das Kompilieren des Quellcodes erforderlich sind. Die Firmware
+                    funktioniert in Kombination mit der <a
+                        href="https://github.com/timo1235/ocs2.x-esp32-software">OPEN-CNC-Shield 2 Firmware</a>.
+                    Verbinde einfach den ESP32 mit dem Computer und klicke auf "Verbinden".</p>
                 <h3>Voraussetzungen</h3>
+                <div>
+                    <a href="https://shop.altholtmann.com/ESP32-Panel-Platine/SW10030">
+                        <img src="assets/esp32 panel.jpg" class="img-thumbnail" width="300px" alt="ESP32 Panel">
+                    </a>
+                    <a href="https://shop.altholtmann.com/ESP32-Panel-Integrated-Battery-Platine/SW10043">
+                        <img src="assets/esp32_panel_integrated_battery.jpg" class="img-thumbnail" width="300px"
+                            alt="ESP32 Panel mit integriertem Akku">
+                    </a>
+                </div>
                 <ul>
                     <li>
-                        <a href="https://shop.altholtmann.com/OPEN-CNC-Shield-2-Mainboard/SW10017">OPEN-CNC-Shield 2
-                            mit
-                            ESP32</a>
-                        oder OPEN-CNC-Shield 2 Mini (ESP32 integriert)
+                        <a href="https://shop.altholtmann.com/ESP32-Panel-Platine/SW10030">ESP32 Panel PCB</a> mit einem
+                        ESP32Devkit V1
+                        <strong>oder</strong>
                     </li>
-                    <li><strong>Google Chrome Browser</strong> - andere könnten auch mit WebSerial funktionieren</li>
-                    <li>Vielleicht Treiber für Ihren PC -> suchen Sie nach ESP32-Treiber und installieren Sie ihn</li>
+                    <li> <a href="https://shop.altholtmann.com/ESP32-Panel-Integrated-Battery-Platine/SW10043">ESP32
+                            Panel mit integriertem Akku</a> mit einem ESP32Devkit V1
+                    </li>
+                    <li><strong>Google Chrome Browser </strong> - andere könnten auch mit WebSerial funktionieren</li>
+                    <li>Vielleicht Treiber für deinen PC -> suche nach ESP32 Treiber und installiere sie</li>
                 </ul>
-
                 <h3>Erster Schritt</h3>
-                <p>Verbinden Sie den ESP32 mit Ihrem Computer und klicken Sie auf die Schaltfläche "Verbinden" unten.
-                    Wählen Sie den seriellen Port des ESP32 und installieren Sie dann die Firmware</p>
+                <p>Verbinde den ESP32 mit deinem Computer und klicke unten auf den "Verbinden"-Knopf. Wähle den
+                    seriellen Port des ESP32 und installiere dann die Firmware</p>
                 <div class="alert alert-info" role="alert">
-                    Wenn der ESP32 nicht erkannt wird, müssen Sie möglicherweise den Treiber für den ESP32 installieren.
-                    Suchen Sie nach "ESP32-Treiber" und installieren Sie ihn.
+                    Wenn der ESP32 nicht erkannt wird, musst du möglicherweise den Treiber für den ESP32 installieren.
+                    Suche nach "ESP32 Treiber" und installiere ihn.
                 </div>
-
                 <p class="button-row" align="center">
-                    <esp-web-install-button id="installButton" manifest="./manifest_ocs2.json"></esp-web-install-button>
+                    <esp-web-install-button id="installButton"
+                        manifest="./manifest_esp32_panel.json"></esp-web-install-button>
                 </p>
-
-                <h3>Verbinden mit dem ESP32</h3>
-                <p>Nach der Firmwareinstallation wird der ESP32 als Zugangspunkt mit dem Namen "OCS2-XXXXX"
+                <h3>Verbindung zum ESP32</h3>
+                <p>Nach der Installation der Firmware wird der ESP32 als Zugangspunkt mit dem Namen "ESP32-Panel-XXXXXX"
                     konfiguriert.</p>
-                <p>Verbinden Sie sich mit dem Zugangspunkt über Ihren Computer oder Ihr Smartphone und öffnen Sie diesen
-                    Link im Browser: <a href="https://192.168.4.1">https://192.168.4.1</a>. Sie sollten das
+                <p>Verbinde dich mit dem Zugangspunkt über deinen Computer oder dein Smartphone und öffne diesen Link im
+                    Browser: <a href="https://192.168.4.1">https://192.168.4.1</a>. Du solltest das
                     Konfigurationswebinterface sehen.</p>
                 <div class="alert alert-warning" role="alert">
-                    Wenn ein <strong>Mobiltelefon</strong> verwendet wird, stellen Sie sicher, dass die mobilen Daten
+                    Wenn ein <strong>Mobiltelefon</strong> verwendet wird, stelle sicher, dass die mobilen Daten
                     deaktiviert sind und das WLAN mit dem richtigen Netzwerk verbunden ist. Mobiltelefone können
                     wählerisch bezüglich des Netzwerks sein, wenn sie keinen Internetzugang haben.
                 </div>
-
-                <h3>Konfiguration über das Webinterface</h3>
-                <p>Konfigurieren Sie den ESP32 mit den Einstellungen, die Sie benötigen, und klicken Sie auf "Neustart".
-                    Der ESP32 wird neu gestartet und die Einstellungen werden aktiviert</p>
+                <h3>Konfigurieren über das Webinterface</h3>
+                <p>Konfiguriere den ESP32 mit den Einstellungen, die du benötigst, und klicke auf "Neustarten". Der
+                    ESP32 wird neu gestartet und die Einstellungen werden aktiviert</p>
                 <div class="alert alert-warning" role="alert">
                     Die Einstellungen werden erst nach einem Neustart wirksam.
                 </div>
-                <img src="assets/webinterface_crop.png" class="img-fluid border border-primary border-2"
+                <img src="assets/webinterface_show_configuration.png" class="img-fluid border border-primary border-2"
                     alt="Webinterface">
             </div>
         </div>
